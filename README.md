@@ -1,5 +1,4 @@
-# Performance-Management
-Talent Performance Management
+## Backend Service for Employee Appraisal System
 
 
 ## Build With
@@ -9,4 +8,4 @@ Talent Performance Management
 - Swagger - API Documentation
 
 
-
+## Installation
