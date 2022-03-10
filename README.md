@@ -11,6 +11,6 @@
 
 ## Getting Started
 - Clone the main repository
-- Run ```mvn clean install ``` to build the project
+- Run ```mvn clean install``` to build the project
 - Run ```mvn spring-boot:run``` to get the project running 
 - The web application is accessible via localhost:8080
