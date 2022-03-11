@@ -3,10 +3,9 @@ package com.appraisal.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @AllArgsConstructor
@@ -17,7 +16,7 @@ public class Employee extends BaseEntity {
 
     private String lastName;
 
-    private Timestamp dateEmployed;
+    private LocalDateTime dateEmployed;
 
     @OneToOne
     @JoinColumn(

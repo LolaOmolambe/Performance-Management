@@ -21,5 +21,5 @@ public class User extends BaseEntity{
 
     private String password;
 
-    private Role userRole = Role.EMPLOYEE;
+    private Role role;
 }

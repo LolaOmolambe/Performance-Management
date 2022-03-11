@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "employee_teams")
 public class EmployeeTeam extends BaseEntity {
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             name = "team_id",
             referencedColumnName = "id"
     )
     private Team team;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             name = "employee_id",
             referencedColumnName = "id"

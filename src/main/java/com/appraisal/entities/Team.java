@@ -11,5 +11,5 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "teams")
 public class Team extends BaseEntity {
-    private String teamName;
+    private String name;
 }

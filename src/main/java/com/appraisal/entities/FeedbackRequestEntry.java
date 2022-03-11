@@ -13,14 +13,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "feedback_request_entry")
 public class FeedbackRequestEntry extends BaseEntity {
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             name = "feedback_request_id",
             referencedColumnName = "id"
     )
     private FeedbackRequest feedbackRequest;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             name = "question_id",
             referencedColumnName = "id"
