@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(50) NOT NULL,
     email_address VARCHAR(100) NOT NULL,
     password TEXT NOT NULL,
-    user_role INTEGER NOT NULL DEFAULT 0,
+    role INTEGER NOT NULL DEFAULT 0,
     deleted          BOOLEAN DEFAULT FALSE ,
     created_on       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
