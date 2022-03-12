@@ -10,20 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Downloas repository
+      - name: Download repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 and Cache dependencies
         uses: actions/setup-java@v2
         with:
           java-version: 17
+          distribution: adopt
+          cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots verify
