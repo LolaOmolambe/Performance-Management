@@ -4,6 +4,7 @@ import com.appraisal.common.annotations.GenericSuccessResponse;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.AssignEmployeeToManagerModel;
 import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.AssignEmployeeToManagerModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.employee.services.EmployeeService;
