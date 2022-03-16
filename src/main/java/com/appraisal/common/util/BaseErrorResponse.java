@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ApiErrorResponseService {
+public class BaseErrorResponse {
 
     public APIResponse buildErrorResponse(String message) {
         return buildErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR.getCode(), message);
