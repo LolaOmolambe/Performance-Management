@@ -2,11 +2,10 @@ package com.appraisal.modules.employee.services.impl;
 
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
-import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.entities.EmployeeManager;
 import com.appraisal.entities.Manager;
-import com.appraisal.modules.employee.services.EmployeeManagerService;
+import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.repositories.EmployeeManagerRepository;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeManagerServiceImpl implements EmployeeManagerService {
+public class DefaultEmployeeManagerServiceImpl implements DefaultEmployeeManagerService {
     private final EmployeeRepository employeeRepository;
     private final ManagerRepository managerRepository;
     private final EmployeeManagerRepository employeeManagerRepository;
@@ -23,10 +22,10 @@ public class EmployeeManagerServiceImpl implements EmployeeManagerService {
     @Override
     public void assignEmployeeToManager(Long employeeId, Long managerId) {
         Manager manager = managerRepository.findById(managerId)
-                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
+                .orElseThrow(() -> new BadRequestException(ResponseCode.INVALID_MANAGER));
 
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_EMPLOYEE));
+                .orElseThrow(() -> new BadRequestException(ResponseCode.INVALID_EMPLOYEE));
 
         boolean isEmployeeAssignedToAManager = employeeManagerRepository.existsByEmployee(employee);
 
