@@ -5,4 +5,6 @@ import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 
 public interface EmployeeService {
     EmployeeModel addEmployee(AddEmployeeModel employeeModel);
+
+    EmployeeModel getEmployee(Long employeeId);
 }

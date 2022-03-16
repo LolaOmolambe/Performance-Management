@@ -3,6 +3,7 @@ package com.appraisal.modules.employee.services.impl;
 import com.appraisal.common.MapStructMapper;
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
+import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
@@ -41,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         boolean employeeExists = employeeRepository.existsByEmail(employeeModel.getEmail());
 
-        if(employeeExists){
+        if (employeeExists) {
             throw new BadRequestException(ResponseCode.DUPLICATE_EMAIL);
         }
 
@@ -50,6 +51,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (Objects.nonNull(employeeModel.getManagerId())) {
             employeeManagerService.assignEmployeeToManager(employee.getId(), employeeModel.getManagerId());
         }
+
+        return mapStructMapper.employeeToEmployeeModel(employee);
+    }
+
+    @Override
+    public EmployeeModel getEmployee(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_EMPLOYEE));
 
         return mapStructMapper.employeeToEmployeeModel(employee);
     }
