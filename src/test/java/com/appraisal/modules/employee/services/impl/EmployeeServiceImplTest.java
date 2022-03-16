@@ -54,6 +54,7 @@ public class EmployeeServiceImplTest {
     private EmployeeModel employeeModel;
     private UpdateEmployeeModel updateEmployeeModel;
     private PageRequest pageRequest;
+    private UpdateEmployeeModel updateEmployeeModel;
 
     @BeforeEach
     void setUp() {
@@ -61,6 +62,7 @@ public class EmployeeServiceImplTest {
         employeeModel = TestData.generateEmployeeModel();
         employeeModelRequest = TestData.generateEmployeeModelRequest();
         employeeModelWithManager = TestData.generateEmployeeModelRequestWithManager();
+        updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
         pageRequest = PageRequest.of(0, 10);
         updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
     }
