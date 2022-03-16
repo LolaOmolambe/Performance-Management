@@ -1,10 +1,9 @@
 package com.appraisal.modules.employee.services.impl;
 
 import com.appraisal.TestData;
+import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.entities.Employee;
 import com.appraisal.entities.Manager;
-import com.appraisal.common.exceptions.BadRequestException;
-import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.repositories.EmployeeManagerRepository;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeeManagerServiceImplTest {
+public class DefaultEmployeeManagerServiceImplTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -34,7 +33,7 @@ public class EmployeeManagerServiceImplTest {
     private EmployeeManagerRepository employeeManagerRepository;
 
     @InjectMocks
-    private EmployeeManagerServiceImpl employeeManagerService;
+    private DefaultEmployeeManagerServiceImpl employeeManagerService;
 
     private Manager manager;
     private Employee employee;
@@ -52,7 +51,7 @@ public class EmployeeManagerServiceImplTest {
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> employeeManagerService.assignEmployeeToManager(1L, 2L))
-                .isInstanceOf(NotFoundException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage("Manager does not exist.");
     }
 
@@ -64,7 +63,7 @@ public class EmployeeManagerServiceImplTest {
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> employeeManagerService.assignEmployeeToManager(1L, 2L))
-                .isInstanceOf(NotFoundException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage("Employee does not exist.");
     }
 

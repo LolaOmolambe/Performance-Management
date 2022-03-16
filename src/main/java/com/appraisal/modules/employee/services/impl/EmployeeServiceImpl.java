@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserService userService;
     private final DefaultEmployeeManagerService employeeManagerService;
-   private final MapStructMapper mapStructMapper;
+    private final MapStructMapper mapStructMapper;
 
     @Override
     @Transactional
