@@ -1,7 +1,6 @@
 package com.appraisal.modules.user.services.impl;
 
 import com.appraisal.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,13 +19,9 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     public void whenUserExistsByUsername() {
-        when(userRepository.existsByEmailAddress("test@test.com"))
+        when(userRepository.existsByEmail("test@test.com"))
                 .thenReturn(true);
 
         boolean userExists = userService.userExists("test@test.com");
@@ -36,7 +31,7 @@ public class UserServiceImplTest {
 
     @Test
     public void whenUserDoesNotExistByUsername() {
-        when(userRepository.existsByEmailAddress("test@test.com"))
+        when(userRepository.existsByEmail("test@test.com"))
                 .thenReturn(false);
 
         boolean userExists = userService.userExists("test@test.com");

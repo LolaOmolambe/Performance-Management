@@ -12,7 +12,7 @@ public class EmployeeModel {
 
     private String lastName;
 
-    private String emailAddress;
+    private String email;
 
     private LocalDateTime dateEmployed;
 }

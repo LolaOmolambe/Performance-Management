@@ -24,7 +24,7 @@ public class AddEmployeeModel {
 
     @NotBlank(message = "Email address is required.")
     @EmailValidator
-    private String emailAddress;
+    private String email;
 
     @Past(message = "Date Employed cannot be in the future.")
     @NotNull(message = "Date Employed is required.")

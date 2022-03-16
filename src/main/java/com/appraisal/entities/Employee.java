@@ -19,7 +19,7 @@ public class Employee extends BaseEntity {
 
     private LocalDateTime dateEmployed;
 
-    private String emailAddress;
+    private String email;
 
     @OneToOne
     @JoinColumn(
