@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @GenericSuccessResponse
 @RequestMapping("/api/v1/employees")
@@ -26,5 +28,12 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getEmployee(@PathVariable Long id) {
         return employeeService.getEmployee(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeModel> getEmployees(@RequestParam(value = "page", defaultValue = "0") int page,
+                                            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return employeeService.getEmployees(page, size);
     }
 }

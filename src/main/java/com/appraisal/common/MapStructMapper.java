@@ -6,6 +6,8 @@ import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(
         componentModel = "spring"
 )
@@ -14,4 +16,6 @@ public interface MapStructMapper {
 
     @Mapping(target = "dateEmployed", expression = "java(addEmployeeModel.getDateEmployed().atStartOfDay())")
     Employee addEmployeeModelToEmployee(AddEmployeeModel addEmployeeModel);
+
+    List<EmployeeModel> map(List<Employee> employees);
 }
