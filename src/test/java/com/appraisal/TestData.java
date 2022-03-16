@@ -3,6 +3,7 @@ package com.appraisal;
 import com.appraisal.entities.Employee;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 
 import java.time.LocalDate;
@@ -57,6 +58,15 @@ public class TestData {
                 .firstName("Test")
                 .lastName("Test")
                 .email("test@test.com")
+                .build();
+    }
+
+    public static UpdateEmployeeModel generateUpdateEmployeeModelRequest(){
+        LocalDate now = LocalDate.now();
+        return UpdateEmployeeModel.builder()
+                .firstName("Test")
+                .lastName("Tester")
+                .dateEmployed(now)
                 .build();
     }
 

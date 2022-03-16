@@ -6,6 +6,7 @@ import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.user.services.UserService;
@@ -47,6 +48,7 @@ public class EmployeeServiceImplTest {
     private AddEmployeeModel employeeModelWithManager;
     private Employee employee;
     private EmployeeModel employeeModel;
+    private UpdateEmployeeModel updateEmployeeModel;
 
     @BeforeEach
     void setUp() {
@@ -54,6 +56,7 @@ public class EmployeeServiceImplTest {
         employeeModel = TestData.generateEmployeeModel();
         employeeModelRequest = TestData.generateEmployeeModelRequest();
         employeeModelWithManager = TestData.generateEmployeeModelRequestWithManager();
+        updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
     }
 
 
@@ -139,6 +142,32 @@ public class EmployeeServiceImplTest {
                 .thenReturn(employeeModel);
 
         EmployeeModel employeeModelObj = employeeService.getEmployee(1L);
+
+        assertNotNull(employeeModelObj.getEmail());
+        assertNotNull(employeeModelObj.getFirstName());
+        assertNotNull(employeeModelObj.getLastName());
+    }
+
+    @Test
+    public void updateEmployeeFails_whenEmployeeDoesNotExist() {
+        when(employeeRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> employeeService.updateEmployeeDetails(1L, updateEmployeeModel))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Employee does not exist.");
+    }
+
+    @Test
+    public void updateEmployeeSuccessfully() {
+        when(employeeRepository.findById(1L))
+                .thenReturn(Optional.of(employee));
+        when(employeeRepository.save(employee))
+                .thenReturn(employee);
+        when(mapStructMapper.employeeToEmployeeModel(employee))
+                .thenReturn(employeeModel);
+
+        EmployeeModel employeeModelObj = employeeService.updateEmployeeDetails(1L, updateEmployeeModel);
 
         assertNotNull(employeeModelObj.getEmail());
         assertNotNull(employeeModelObj.getFirstName());
