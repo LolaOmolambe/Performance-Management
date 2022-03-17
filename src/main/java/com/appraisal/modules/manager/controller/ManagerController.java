@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @GenericSuccessResponse
 @RequestMapping("/api/v1/managers")
@@ -26,5 +28,12 @@ public class ManagerController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getManager(@PathVariable Long id) {
         return managerService.getManager(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeModel> getManagers(@RequestParam(value = "page", defaultValue = "0") int page,
+                                            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return managerService.getManagers(page, size);
     }
 }

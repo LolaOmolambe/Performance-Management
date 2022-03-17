@@ -11,7 +11,12 @@ import com.appraisal.modules.manager.services.ManagerService;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +48,33 @@ public class ManagerServiceImpl implements ManagerService {
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
 
         return mapStructMapper.employeeToEmployeeModel(manager.getEmployee());
+    }
+
+    @Override
+    public List<EmployeeModel> getManagers(int page, int pageSize) {
+        if (page > 0) page = page - 1;
+
+        Page<Manager> managers = managerRepository.findAll(PageRequest.of(page, pageSize));
+        List<Manager> managersContent = managers.getContent();
+
+        return getEmployeeModels(managersContent);
+    }
+
+    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
+        List<EmployeeModel> employeeModels = new ArrayList<>();
+
+        for(Manager manager: managersContent){
+            Employee employee = manager.getEmployee();
+            EmployeeModel employeeModel = EmployeeModel.builder()
+                    .lastName(employee.getLastName())
+                    .firstName(employee.getFirstName())
+                    .dateEmployed(employee.getDateEmployed())
+                    .id(employee.getId())
+                    .email(employee.getEmail())
+                    .build();
+
+            employeeModels.add(employeeModel);
+        }
+        return employeeModels;
     }
 }
