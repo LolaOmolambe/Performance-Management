@@ -9,6 +9,7 @@ public enum ResponseCode {
     INVALID_EMPLOYEE("4003", "Employee does not exist."),
     EMPLOYEE_MANAGER_EXISTS("4004", "Employee already assigned to a manager."),
     NOT_FOUND("4005", "The requested resource does not exist."),
+    MANAGER_EXISTS("4006", "A manager with this email already exists."),
 
     // 500 Series
     INTERNAL_SERVER_ERROR("5000", "An unexpected error occurred while processing your request. Please try again later.");
