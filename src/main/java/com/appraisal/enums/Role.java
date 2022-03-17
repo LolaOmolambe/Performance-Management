@@ -1,6 +1,6 @@
 package com.appraisal.enums;
 
 public enum Role {
-    ADMIN,
-    EMPLOYEE
+    EMPLOYEE,
+    ADMIN
 }
