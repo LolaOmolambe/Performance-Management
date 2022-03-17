@@ -1,7 +1,6 @@
 package com.appraisal.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -11,6 +10,9 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "managers")
 public class Manager extends BaseEntity{
     @OneToOne

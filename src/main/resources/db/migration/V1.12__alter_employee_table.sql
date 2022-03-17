@@ -1,0 +1,3 @@
+ALTER TABLE employees
+    ADD COLUMN email_address VARCHAR(100) NOT NULL,
+    ALTER COLUMN user_id DROP NOT NULL;

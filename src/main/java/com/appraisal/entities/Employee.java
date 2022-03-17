@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "employees")
@@ -17,6 +18,8 @@ public class Employee extends BaseEntity {
     private String lastName;
 
     private LocalDateTime dateEmployed;
+
+    private String email;
 
     @OneToOne
     @JoinColumn(
