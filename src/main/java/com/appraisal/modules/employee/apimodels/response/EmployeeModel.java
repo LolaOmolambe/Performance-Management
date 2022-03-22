@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class EmployeeModel {
+    private Long id;
+
     private String firstName;
 
     private String lastName;

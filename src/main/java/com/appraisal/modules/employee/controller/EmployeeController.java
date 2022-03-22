@@ -21,4 +21,10 @@ public class EmployeeController {
     public EmployeeModel addEmployee(@Validated @RequestBody AddEmployeeModel addEmployeeModel) {
         return employeeService.addEmployee(addEmployeeModel);
     }
+
+    @GetMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeModel getEmployee(@PathVariable Long id) {
+        return employeeService.getEmployee(id);
+    }
 }
