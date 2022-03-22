@@ -37,4 +37,10 @@ public class ManagerController {
     public List<EmployeeModel> getManagers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return managerService.getManagers(pageable);
     }
+
+    @GetMapping(path = "/{id}/employees")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeModel> getEmployeesAttachedToManager(@PathVariable Long id, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return managerService.getEmployeesAttachedToManager(id, pageable);
+    }
 }

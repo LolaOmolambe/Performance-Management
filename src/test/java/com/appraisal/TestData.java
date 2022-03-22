@@ -1,6 +1,7 @@
 package com.appraisal;
 
 import com.appraisal.entities.Employee;
+import com.appraisal.entities.EmployeeManager;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
@@ -78,6 +79,17 @@ public class TestData {
         Manager manager = generateManager();
         List<Manager> managers = Collections.singletonList(manager);
         return (Page<Manager>) new PageImpl(managers);
+    }
+
+    public static Page<EmployeeManager> getEmployeeManagers() {
+        Manager manager = generateManager();
+        Employee employee = generateEmployee();
+
+        EmployeeManager employeeManager = EmployeeManager.builder().manager(manager).employee(employee).build();
+        employeeManager.setId(1L);
+
+        List<EmployeeManager> employeeManagers = Collections.singletonList(employeeManager);
+        return (Page<EmployeeManager>) new PageImpl(employeeManagers);
     }
 
 }
