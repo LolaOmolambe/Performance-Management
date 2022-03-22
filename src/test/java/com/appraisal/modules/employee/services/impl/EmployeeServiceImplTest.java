@@ -3,6 +3,7 @@ package com.appraisal.modules.employee.services.impl;
 import com.appraisal.TestData;
 import com.appraisal.common.MapStructMapper;
 import com.appraisal.common.exceptions.BadRequestException;
+import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
@@ -16,8 +17,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -116,4 +120,29 @@ public class EmployeeServiceImplTest {
         assertEquals(employeeModelRequest.getFirstName(), savedEmployee.getFirstName());
         assertEquals(employeeModelRequest.getLastName(), savedEmployee.getLastName());
     }
+
+    @Test
+    public void getEmployeeFails_whenEmployeeDoesNotExist() {
+        when(employeeRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> employeeService.getEmployee(1L))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Employee does not exist.");
+    }
+
+    @Test
+    public void getEmployeeSuccessfully() {
+        when(employeeRepository.findById(1L))
+                .thenReturn(Optional.of(employee));
+        when(mapStructMapper.employeeToEmployeeModel(employee))
+                .thenReturn(employeeModel);
+
+        EmployeeModel employeeModelObj = employeeService.getEmployee(1L);
+
+        assertNotNull(employeeModelObj.getEmail());
+        assertNotNull(employeeModelObj.getFirstName());
+        assertNotNull(employeeModelObj.getLastName());
+    }
+
 }
