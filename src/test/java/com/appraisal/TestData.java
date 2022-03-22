@@ -5,9 +5,13 @@ import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 public class TestData {
     public static AddEmployeeModel generateEmployeeModelRequest(){
@@ -68,6 +72,12 @@ public class TestData {
                 .lastName("Tester")
                 .dateEmployed(now)
                 .build();
+    }
+
+    public static Page<Manager> getManagers() {
+        Manager manager = generateManager();
+        List<Manager> managers = Collections.singletonList(manager);
+        return (Page<Manager>) new PageImpl(managers);
     }
 
 }

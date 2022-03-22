@@ -5,6 +5,8 @@ import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.manager.apimodels.request.AddManagerModel;
 import com.appraisal.modules.manager.services.ManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +34,7 @@ public class ManagerController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeModel> getManagers(@RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "size", defaultValue = "10") int size) {
-        return managerService.getManagers(page, size);
+    public List<EmployeeModel> getManagers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return managerService.getManagers(pageable);
     }
 }

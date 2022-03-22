@@ -15,7 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -40,12 +43,14 @@ public class ManagerServiceImplTest {
     private Employee employee;
     private Manager manager;
     private EmployeeModel employeeModel;
+    private PageRequest pageRequest;
 
     @BeforeEach
     public void setUp() {
         employee = TestData.generateEmployee();
         manager = TestData.generateManager();
         employeeModel = TestData.generateEmployeeModel();
+        pageRequest = PageRequest.of(0, 10);
     }
 
     @Test
@@ -102,5 +107,27 @@ public class ManagerServiceImplTest {
         assertNotNull(manager.getEmail());
         assertNotNull(manager.getFirstName());
         assertNotNull(manager.getLastName());
+    }
+
+    @Test
+    public void getManagersSuccessfully() {
+        Page<Manager> pagedResponse = TestData.getManagers();
+
+        when(managerRepository.findAll(pageRequest))
+                .thenReturn(pagedResponse);
+
+        List<EmployeeModel> managers = managerService.getManagers(pageRequest);
+
+        assertEquals(1, managers.size());
+    }
+
+    @Test
+    public void getEmptyListOfManagersSuccessfully() {
+        when(managerRepository.findAll(pageRequest))
+                .thenReturn(Page.empty());
+
+        List<EmployeeModel> managers = managerService.getManagers(pageRequest);
+
+        assertEquals(0, managers.size());
     }
 }
