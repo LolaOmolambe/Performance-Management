@@ -14,7 +14,7 @@ import com.appraisal.modules.user.services.UserService;
 import com.appraisal.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,10 +68,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeModel> getEmployees(int page, int pageSize) {
-        if (page > 0) page = page - 1;
-
-        Page<Employee> employees = employeeRepository.findAll(PageRequest.of(page, pageSize));
+    public List<EmployeeModel> getEmployees(Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findAll(pageable);
         List<Employee> employeeList = employees.getContent();
 
         return mapStructMapper.map(employeeList);
