@@ -16,7 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -47,6 +51,7 @@ public class EmployeeServiceImplTest {
     private AddEmployeeModel employeeModelWithManager;
     private Employee employee;
     private EmployeeModel employeeModel;
+    private PageRequest pageRequest;
 
     @BeforeEach
     void setUp() {
@@ -54,6 +59,7 @@ public class EmployeeServiceImplTest {
         employeeModel = TestData.generateEmployeeModel();
         employeeModelRequest = TestData.generateEmployeeModelRequest();
         employeeModelWithManager = TestData.generateEmployeeModelRequestWithManager();
+        pageRequest = PageRequest.of(0, 10);
     }
 
 
@@ -144,5 +150,33 @@ public class EmployeeServiceImplTest {
         assertNotNull(employeeModelObj.getFirstName());
         assertNotNull(employeeModelObj.getLastName());
     }
+
+    @Test
+    public void getEmployeesSuccessfully() {
+        Page<Employee> pagedResponse = TestData.getEmployees();
+
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(pagedResponse);
+        when(mapStructMapper.map(Collections.singletonList(employee)))
+                .thenReturn(Collections.singletonList(employeeModel));
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(1, employees.size());
+    }
+
+
+    @Test
+    public void getEmptyListOfEmployeesSuccessfully() {
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(Page.empty());
+        when(mapStructMapper.map(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(0, employees.size());
+    }
+
 
 }

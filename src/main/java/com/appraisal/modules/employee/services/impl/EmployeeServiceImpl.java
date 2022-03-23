@@ -12,9 +12,12 @@ import com.appraisal.modules.employee.services.EmployeeService;
 import com.appraisal.modules.user.services.UserService;
 import com.appraisal.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -61,6 +64,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_EMPLOYEE));
 
         return mapStructMapper.employeeToEmployeeModel(employee);
+    }
+
+    @Override
+    public List<EmployeeModel> getEmployees(Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findAll(pageable);
+        List<Employee> employeeList = employees.getContent();
+
+        return mapStructMapper.map(employeeList);
     }
 
     private Employee saveEmployee(AddEmployeeModel employeeModel) {
