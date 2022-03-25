@@ -14,5 +14,5 @@ public interface EmployeeService {
 
     List<EmployeeModel> getEmployees(Pageable pageable);
 
-    EmployeeModel updateEmployeeDetails(Long employeeId,UpdateEmployeeModel updateEmployeeModel);
+    EmployeeModel updateEmployee(Long employeeId, UpdateEmployeeModel updateEmployeeModel);
 }

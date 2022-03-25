@@ -48,6 +48,6 @@ public class EmployeeController {
     @PutMapping(value = "/{id}")
     public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
                                         @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
-       return employeeService.updateEmployeeDetails(id, updateEmployeeModel);
+       return employeeService.updateEmployee(id, updateEmployeeModel);
     }
 }

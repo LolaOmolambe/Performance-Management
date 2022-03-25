@@ -187,7 +187,7 @@ public class EmployeeServiceImplTest {
         when(employeeRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> employeeService.updateEmployeeDetails(1L, updateEmployeeModel))
+        assertThatThrownBy(() -> employeeService.updateEmployee(1L, updateEmployeeModel))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Employee does not exist.");
     }
@@ -201,7 +201,7 @@ public class EmployeeServiceImplTest {
         when(mapStructMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
-        EmployeeModel employeeModelObj = employeeService.updateEmployeeDetails(1L, updateEmployeeModel);
+        EmployeeModel employeeModelObj = employeeService.updateEmployee(1L, updateEmployeeModel);
 
         assertNotNull(employeeModelObj.getEmail());
         assertNotNull(employeeModelObj.getFirstName());
