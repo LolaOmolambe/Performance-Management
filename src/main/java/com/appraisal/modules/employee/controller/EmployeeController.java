@@ -2,7 +2,9 @@ package com.appraisal.modules.employee.controller;
 
 import com.appraisal.common.annotations.GenericSuccessResponse;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.AssignEmployeeToManagerModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
+import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.employee.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeController {
     private final EmployeeService employeeService;
+    private final DefaultEmployeeManagerService defaultEmployeeManagerService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -27,14 +30,17 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getEmployee(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeModel> getEmployees(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return employeeService.getEmployees(pageable);
+    }
+
+    @PostMapping("/assign-manager")
+    public void assignEmployeeToManager(@Validated @RequestBody AssignEmployeeToManagerModel employeeToManagerModel) {
+         defaultEmployeeManagerService.assignEmployeeToManager(employeeToManagerModel.getEmployeeId(), employeeToManagerModel.getManagerId());
     }
 }
