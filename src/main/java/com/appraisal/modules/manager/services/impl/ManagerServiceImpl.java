@@ -11,7 +11,11 @@ import com.appraisal.modules.manager.services.ManagerService;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +47,29 @@ public class ManagerServiceImpl implements ManagerService {
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
 
         return employeeMapper.employeeToEmployeeModel(manager.getEmployee());
+    }
+
+    @Override
+    public List<EmployeeModel> getManagers(Pageable pageable) {
+        Page<Manager> managers = managerRepository.findAll(pageable);
+        List<Manager> managersContent = managers.getContent();
+
+        return getEmployeeModels(managersContent);
+    }
+
+    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
+        return managersContent.stream()
+                .map(this::getEmployeeModel).toList();
+    }
+
+    private EmployeeModel getEmployeeModel(Manager manager) {
+        Employee employee = manager.getEmployee();
+        return EmployeeModel.builder()
+                .lastName(employee.getLastName())
+                .firstName(employee.getFirstName())
+                .dateEmployed(employee.getDateEmployed())
+                .id(employee.getId())
+                .email(employee.getEmail())
+                .build();
     }
 }

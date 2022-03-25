@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 public class TestData {
@@ -76,7 +75,14 @@ public class TestData {
 
     public static Page<Employee> getEmployees() {
         Employee employee = generateEmployee();
-        List<Employee> employees = Collections.singletonList(employee);
-        return (Page<Employee>) new PageImpl(employees);
+        List<Employee> employees = List.of(employee);
+        return new PageImpl(employees);
     }
+
+    public static Page<Manager> getManagers() {
+        Manager manager = generateManager();
+        List<Manager> managers = List.of(manager);
+        return  new PageImpl(managers);
+    }
+
 }

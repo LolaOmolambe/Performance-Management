@@ -5,9 +5,13 @@ import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.manager.apimodels.request.AddManagerModel;
 import com.appraisal.modules.manager.services.ManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @GenericSuccessResponse
@@ -23,8 +27,12 @@ public class ManagerController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getManager(@PathVariable Long id) {
         return managerService.getManager(id);
+    }
+
+    @GetMapping
+    public List<EmployeeModel> getManagers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return managerService.getManagers(pageable);
     }
 }
