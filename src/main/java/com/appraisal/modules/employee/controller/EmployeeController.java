@@ -3,6 +3,7 @@ package com.appraisal.modules.employee.controller;
 import com.appraisal.common.annotations.GenericSuccessResponse;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.AssignEmployeeToManagerModel;
+import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.employee.services.EmployeeService;
@@ -42,5 +43,11 @@ public class EmployeeController {
     @PostMapping("/assign-manager")
     public void assignEmployeeToManager(@Validated @RequestBody AssignEmployeeToManagerModel employeeToManagerModel) {
          defaultEmployeeManagerService.assignEmployeeToManager(employeeToManagerModel.getEmployeeId(), employeeToManagerModel.getManagerId());
+    }
+
+    @PutMapping(value = "/{id}")
+    public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
+                                        @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
+       return employeeService.updateEmployeeDetails(id, updateEmployeeModel);
     }
 }

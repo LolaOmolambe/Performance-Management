@@ -6,6 +6,7 @@ import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.employee.services.EmployeeService;
@@ -72,6 +73,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employeeList = employees.getContent();
 
         return mapStructMapper.map(employeeList);
+    }
+
+    @Override
+    public EmployeeModel updateEmployeeDetails(Long employeeId, UpdateEmployeeModel updateEmployeeModel) {
+        Employee existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new BadRequestException(ResponseCode.INVALID_EMPLOYEE));
+
+        existingEmployee.setFirstName(updateEmployeeModel.getFirstName());
+        existingEmployee.setLastName(updateEmployeeModel.getLastName());
+        existingEmployee.setDateEmployed(updateEmployeeModel.getDateEmployed().atStartOfDay());
+
+        Employee employee = employeeRepository.save(existingEmployee);
+
+        return mapStructMapper.employeeToEmployeeModel(employee);
     }
 
     private Employee saveEmployee(AddEmployeeModel employeeModel) {

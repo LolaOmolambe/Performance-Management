@@ -3,6 +3,7 @@ package com.appraisal;
 import com.appraisal.entities.Employee;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
+import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -64,10 +65,18 @@ public class TestData {
                 .build();
     }
 
+    public static UpdateEmployeeModel generateUpdateEmployeeModelRequest(){
+        LocalDate now = LocalDate.now();
+        return UpdateEmployeeModel.builder()
+                .firstName("Test")
+                .lastName("Tester")
+                .dateEmployed(now)
+                .build();
+    }
+
     public static Page<Employee> getEmployees() {
         Employee employee = generateEmployee();
         List<Employee> employees = Collections.singletonList(employee);
         return (Page<Employee>) new PageImpl(employees);
     }
-
 }
