@@ -30,19 +30,16 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getEmployee(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeModel> getEmployees(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return employeeService.getEmployees(pageable);
     }
 
     @PostMapping("/assign-manager")
-    @ResponseStatus(HttpStatus.OK)
     public void assignEmployeeToManager(@Validated @RequestBody AssignEmployeeToManagerModel employeeToManagerModel) {
          defaultEmployeeManagerService.assignEmployeeToManager(employeeToManagerModel.getEmployeeId(), employeeToManagerModel.getManagerId());
     }
