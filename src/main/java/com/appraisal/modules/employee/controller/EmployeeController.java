@@ -29,26 +29,22 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getEmployee(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeModel> getEmployees(@RequestParam(value = "page", defaultValue = "0") int page,
                                             @RequestParam(value = "size", defaultValue = "10") int size) {
         return employeeService.getEmployees(page, size);
     }
 
     @PostMapping("/assign-manager")
-    @ResponseStatus(HttpStatus.OK)
     public void assignEmployeeToManager(@Validated @RequestBody AssignEmployeeToManagerModel employeeToManagerModel) {
          defaultEmployeeManagerService.assignEmployeeToManager(employeeToManagerModel.getEmployeeId(), employeeToManagerModel.getManagerId());
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
                                         @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
        return employeeService.updateEmployeeDetails(id, updateEmployeeModel);

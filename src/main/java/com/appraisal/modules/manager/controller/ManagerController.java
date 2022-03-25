@@ -27,13 +27,11 @@ public class ManagerController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeModel getManager(@PathVariable Long id) {
         return managerService.getManager(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeModel> getManagers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return managerService.getManagers(pageable);
     }
