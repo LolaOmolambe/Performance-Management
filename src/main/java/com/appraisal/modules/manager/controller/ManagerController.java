@@ -1,6 +1,7 @@
 package com.appraisal.modules.manager.controller;
 
 import com.appraisal.common.annotations.GenericSuccessResponse;
+import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.manager.apimodels.request.AddManagerModel;
 import com.appraisal.modules.manager.services.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,11 @@ public class ManagerController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addManager(@Validated @RequestBody AddManagerModel addManagerModel){
         managerService.addManager(addManagerModel.getEmployeeId());
+    }
+
+    @GetMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeModel getManager(@PathVariable Long id) {
+        return managerService.getManager(id);
     }
 }

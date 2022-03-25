@@ -1,9 +1,12 @@
 package com.appraisal.modules.manager.services.impl;
 
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
+import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
 import com.appraisal.entities.Manager;
+import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.manager.services.ManagerService;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class ManagerServiceImpl implements ManagerService {
     private final EmployeeRepository employeeRepository;
     private final ManagerRepository managerRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     public void addManager(Long employeeId) {
@@ -31,5 +35,13 @@ public class ManagerServiceImpl implements ManagerService {
         Manager manager = Manager.builder().employee(employee).build();
 
         managerRepository.save(manager);
+    }
+
+    @Override
+    public EmployeeModel getManager(Long managerId) {
+        Manager manager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
+
+        return employeeMapper.employeeToEmployeeModel(manager.getEmployee());
     }
 }
