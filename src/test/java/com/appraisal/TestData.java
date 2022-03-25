@@ -5,12 +5,16 @@ import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 public class TestData {
-    public static AddEmployeeModel generateEmployeeModelRequest(){
+    public static AddEmployeeModel generateEmployeeModelRequest() {
         LocalDate now = LocalDate.now();
         return AddEmployeeModel.builder()
                 .firstName("Test")
@@ -20,7 +24,7 @@ public class TestData {
                 .build();
     }
 
-    public static Employee generateEmployee(){
+    public static Employee generateEmployee() {
         LocalDate now = LocalDate.now();
         LocalDateTime localDateTime = now.atStartOfDay();
         Employee employee = Employee.builder()
@@ -33,7 +37,7 @@ public class TestData {
         return employee;
     }
 
-    public static AddEmployeeModel generateEmployeeModelRequestWithManager(){
+    public static AddEmployeeModel generateEmployeeModelRequestWithManager() {
         LocalDate now = LocalDate.now();
         return AddEmployeeModel.builder()
                 .firstName("Test")
@@ -44,7 +48,7 @@ public class TestData {
                 .build();
     }
 
-    public static Manager generateManager(){
+    public static Manager generateManager() {
         Employee employee = generateEmployee();
         Manager manager = Manager.builder()
                 .employee(employee)
@@ -53,7 +57,7 @@ public class TestData {
         return manager;
     }
 
-    public static EmployeeModel generateEmployeeModel(){
+    public static EmployeeModel generateEmployeeModel() {
         return EmployeeModel.builder()
                 .firstName("Test")
                 .lastName("Test")
@@ -70,4 +74,9 @@ public class TestData {
                 .build();
     }
 
+    public static Page<Employee> getEmployees() {
+        Employee employee = generateEmployee();
+        List<Employee> employees = Collections.singletonList(employee);
+        return (Page<Employee>) new PageImpl(employees);
+    }
 }
