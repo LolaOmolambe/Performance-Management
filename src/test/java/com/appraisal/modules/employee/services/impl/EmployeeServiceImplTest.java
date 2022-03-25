@@ -63,7 +63,6 @@ public class EmployeeServiceImplTest {
         employeeModelWithManager = TestData.generateEmployeeModelRequestWithManager();
         updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
         pageRequest = PageRequest.of(0, 10);
-        updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
     }
 
 
@@ -154,6 +153,34 @@ public class EmployeeServiceImplTest {
         assertNotNull(employeeModelObj.getFirstName());
         assertNotNull(employeeModelObj.getLastName());
     }
+
+    @Test
+    public void getEmployeesSuccessfully() {
+        Page<Employee> pagedResponse = TestData.getEmployees();
+
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(pagedResponse);
+        when(mapStructMapper.map(Collections.singletonList(employee)))
+                .thenReturn(Collections.singletonList(employeeModel));
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(1, employees.size());
+    }
+
+
+    @Test
+    public void getEmptyListOfEmployeesSuccessfully() {
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(Page.empty());
+        when(mapStructMapper.map(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(0, employees.size());
+    }
+
 
     @Test
     public void updateEmployeeFails_whenEmployeeDoesNotExist() {
