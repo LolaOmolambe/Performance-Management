@@ -65,15 +65,6 @@ public class ManagerServiceImpl implements ManagerService {
         return managersContent.stream()
                 .map(this::getEmployeeModel).toList();
     }
-    @Override
-    public List<EmployeeModel> getEmployeesAttachedToManager(Long managerId, Pageable pageable) {
-        Manager manager = managerRepository.findById(managerId)
-                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
-
-        Page<EmployeeManager> allByManager = employeeManagerRepository.findAllByManager(manager, pageable);
-        List<EmployeeManager> allByManagerContent = allByManager.getContent();
-
-        List<EmployeeModel> employeeModels = new ArrayList<>();
 
     private EmployeeModel getEmployeeModel(Manager manager) {
         Employee employee = manager.getEmployee();
@@ -84,7 +75,20 @@ public class ManagerServiceImpl implements ManagerService {
                 .id(employee.getId())
                 .email(employee.getEmail())
                 .build();
-        for(EmployeeManager employeeManager: allByManagerContent){
+    }
+
+    @Override
+    public List<EmployeeModel> getEmployeesAttachedToManager(Long managerId, Pageable pageable) {
+        Manager manager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
+
+        Page<EmployeeManager> allByManager = employeeManagerRepository.findAllByManager(manager, pageable);
+        List<EmployeeManager> allByManagerContent = allByManager.getContent();
+
+        List<EmployeeModel> employeeModels = new ArrayList<>();
+
+
+        for (EmployeeManager employeeManager : allByManagerContent) {
             Employee employee = employeeManager.getEmployee();
             EmployeeModel employeeModel = buildEmployeeModel(employee);
             employeeModels.add(employeeModel);
@@ -102,15 +106,5 @@ public class ManagerServiceImpl implements ManagerService {
                 .build();
     }
 
-    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
-        List<EmployeeModel> employeeModels = new ArrayList<>();
 
-        for (Manager manager : managersContent) {
-            Employee employee = manager.getEmployee();
-            EmployeeModel employeeModel = buildEmployeeModel(employee);
-
-            employeeModels.add(employeeModel);
-        }
-        return employeeModels;
-    }
 }
