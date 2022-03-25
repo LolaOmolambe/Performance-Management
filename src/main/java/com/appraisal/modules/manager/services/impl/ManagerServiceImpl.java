@@ -1,6 +1,6 @@
 package com.appraisal.modules.manager.services.impl;
 
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
@@ -25,8 +25,8 @@ import java.util.List;
 public class ManagerServiceImpl implements ManagerService {
     private final EmployeeRepository employeeRepository;
     private final ManagerRepository managerRepository;
+    private final EmployeeMapper employeeMapper;
     private final EmployeeManagerRepository employeeManagerRepository;
-    private final MapStructMapper mapStructMapper;
 
     @Override
     public void addManager(Long employeeId) {
@@ -50,7 +50,7 @@ public class ManagerServiceImpl implements ManagerService {
         Manager manager = managerRepository.findById(managerId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
 
-        return mapStructMapper.employeeToEmployeeModel(manager.getEmployee());
+        return employeeMapper.employeeToEmployeeModel(manager.getEmployee());
     }
 
     @Override
@@ -61,6 +61,10 @@ public class ManagerServiceImpl implements ManagerService {
         return getEmployeeModels(managersContent);
     }
 
+    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
+        return managersContent.stream()
+                .map(this::getEmployeeModel).toList();
+    }
     @Override
     public List<EmployeeModel> getEmployeesAttachedToManager(Long managerId, Pageable pageable) {
         Manager manager = managerRepository.findById(managerId)
@@ -71,6 +75,15 @@ public class ManagerServiceImpl implements ManagerService {
 
         List<EmployeeModel> employeeModels = new ArrayList<>();
 
+    private EmployeeModel getEmployeeModel(Manager manager) {
+        Employee employee = manager.getEmployee();
+        return EmployeeModel.builder()
+                .lastName(employee.getLastName())
+                .firstName(employee.getFirstName())
+                .dateEmployed(employee.getDateEmployed())
+                .id(employee.getId())
+                .email(employee.getEmail())
+                .build();
         for(EmployeeManager employeeManager: allByManagerContent){
             Employee employee = employeeManager.getEmployee();
             EmployeeModel employeeModel = buildEmployeeModel(employee);
