@@ -1,6 +1,6 @@
 package com.appraisal.modules.employee.services.impl;
 
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserService userService;
     private final DefaultEmployeeManagerService employeeManagerService;
-    private final MapStructMapper mapStructMapper;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     @Transactional
@@ -56,7 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeManagerService.assignEmployeeToManager(employee.getId(), employeeModel.getManagerId());
         }
 
-        return mapStructMapper.employeeToEmployeeModel(employee);
+        return employeeMapper.employeeToEmployeeModel(employee);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_EMPLOYEE));
 
-        return mapStructMapper.employeeToEmployeeModel(employee);
+        return employeeMapper.employeeToEmployeeModel(employee);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Page<Employee> employees = employeeRepository.findAll(PageRequest.of(page, pageSize));
         List<Employee> employeeList = employees.getContent();
 
-        return mapStructMapper.map(employeeList);
+        return employeeMapper.employeesToEmployeeModels(employeeList);
     }
 
     @Override
@@ -88,11 +88,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = employeeRepository.save(existingEmployee);
 
-        return mapStructMapper.employeeToEmployeeModel(employee);
+        return employeeMapper.employeeToEmployeeModel(employee);
     }
 
     private Employee saveEmployee(AddEmployeeModel employeeModel) {
-        Employee employee = mapStructMapper.addEmployeeModelToEmployee(employeeModel);
+        Employee employee = employeeMapper.addEmployeeModelToEmployee(employeeModel);
         return employeeRepository.save(employee);
     }
 }

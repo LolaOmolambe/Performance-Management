@@ -1,7 +1,7 @@
 package com.appraisal.modules.employee.services.impl;
 
 import com.appraisal.TestData;
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
@@ -39,7 +39,7 @@ public class EmployeeServiceImplTest {
     private UserService userService;
 
     @Mock
-    private MapStructMapper mapStructMapper;
+    private EmployeeMapper employeeMapper;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
@@ -90,9 +90,9 @@ public class EmployeeServiceImplTest {
                 .thenReturn(false);
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.addEmployeeModelToEmployee(employeeModelRequest))
+        when(employeeMapper.addEmployeeModelToEmployee(employeeModelRequest))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel savedEmployee = employeeService.addEmployee(employeeModelRequest);
@@ -110,9 +110,9 @@ public class EmployeeServiceImplTest {
                 .thenReturn(false);
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.addEmployeeModelToEmployee(employeeModelWithManager))
+        when(employeeMapper.addEmployeeModelToEmployee(employeeModelWithManager))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
         doNothing().
                 when(employeeManagerService).assignEmployeeToManager(employee.getId(), employeeModelWithManager.getManagerId());
@@ -138,7 +138,7 @@ public class EmployeeServiceImplTest {
     public void getEmployeeSuccessfully() {
         when(employeeRepository.findById(1L))
                 .thenReturn(Optional.of(employee));
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel employeeModelObj = employeeService.getEmployee(1L);
@@ -164,7 +164,7 @@ public class EmployeeServiceImplTest {
                 .thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel employeeModelObj = employeeService.updateEmployeeDetails(1L, updateEmployeeModel);

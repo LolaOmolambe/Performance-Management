@@ -11,11 +11,11 @@ import java.util.List;
 @Mapper(
         componentModel = "spring"
 )
-public interface MapStructMapper {
+public interface EmployeeMapper {
     EmployeeModel employeeToEmployeeModel(Employee employee);
 
     @Mapping(target = "dateEmployed", expression = "java(addEmployeeModel.getDateEmployed().atStartOfDay())")
     Employee addEmployeeModelToEmployee(AddEmployeeModel addEmployeeModel);
 
-    List<EmployeeModel> map(List<Employee> employees);
+    List<EmployeeModel> employeesToEmployeeModels(List<Employee> employees);
 }

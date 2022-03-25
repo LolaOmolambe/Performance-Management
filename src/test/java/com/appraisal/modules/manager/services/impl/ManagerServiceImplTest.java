@@ -1,7 +1,7 @@
 package com.appraisal.modules.manager.services.impl;
 
 import com.appraisal.TestData;
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
@@ -32,7 +32,7 @@ public class ManagerServiceImplTest {
     private ManagerRepository managerRepository;
 
     @Mock
-    private MapStructMapper mapStructMapper;
+    private EmployeeMapper employeeMapper;
 
     @InjectMocks
     private ManagerServiceImpl managerService;
@@ -94,7 +94,7 @@ public class ManagerServiceImplTest {
     public void getManagerSuccessfully() {
         when(managerRepository.findById(1L))
                 .thenReturn(Optional.of(manager));
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel manager = managerService.getManager(1L);
