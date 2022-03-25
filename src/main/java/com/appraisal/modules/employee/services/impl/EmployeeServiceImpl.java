@@ -78,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeModel updateEmployeeDetails(Long employeeId, UpdateEmployeeModel updateEmployeeModel) {
+    public EmployeeModel updateEmployee(Long employeeId, UpdateEmployeeModel updateEmployeeModel) {
         Employee existingEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new BadRequestException(ResponseCode.INVALID_EMPLOYEE));
 

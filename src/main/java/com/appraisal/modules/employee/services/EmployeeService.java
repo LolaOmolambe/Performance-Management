@@ -13,5 +13,5 @@ public interface EmployeeService {
 
     List<EmployeeModel> getEmployees(int page, int pageSize);
 
-    EmployeeModel updateEmployeeDetails(Long employeeId,UpdateEmployeeModel updateEmployeeModel);
+    EmployeeModel updateEmployee(Long employeeId, UpdateEmployeeModel updateEmployeeModel);
 }

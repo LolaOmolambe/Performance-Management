@@ -51,6 +51,6 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
                                         @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
-       return employeeService.updateEmployeeDetails(id, updateEmployeeModel);
+       return employeeService.updateEmployee(id, updateEmployeeModel);
     }
 }
