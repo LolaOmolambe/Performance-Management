@@ -8,6 +8,8 @@ import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.employee.services.DefaultEmployeeManagerService;
 import com.appraisal.modules.employee.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +36,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeModel> getEmployees(@RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "size", defaultValue = "10") int size) {
-        return employeeService.getEmployees(page, size);
+    public List<EmployeeModel> getEmployees(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return employeeService.getEmployees(pageable);
     }
 
     @PostMapping("/assign-manager")
@@ -47,6 +48,6 @@ public class EmployeeController {
     @PutMapping(value = "/{id}")
     public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
                                         @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
-       return employeeService.updateEmployeeDetails(id, updateEmployeeModel);
+       return employeeService.updateEmployee(id, updateEmployeeModel);
     }
 }

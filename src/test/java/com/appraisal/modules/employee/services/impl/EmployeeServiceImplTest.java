@@ -1,7 +1,7 @@
 package com.appraisal.modules.employee.services.impl;
 
 import com.appraisal.TestData;
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
@@ -17,7 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -39,7 +43,7 @@ public class EmployeeServiceImplTest {
     private UserService userService;
 
     @Mock
-    private MapStructMapper mapStructMapper;
+    private EmployeeMapper employeeMapper;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
@@ -49,6 +53,7 @@ public class EmployeeServiceImplTest {
     private Employee employee;
     private EmployeeModel employeeModel;
     private UpdateEmployeeModel updateEmployeeModel;
+    private PageRequest pageRequest;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +62,7 @@ public class EmployeeServiceImplTest {
         employeeModelRequest = TestData.generateEmployeeModelRequest();
         employeeModelWithManager = TestData.generateEmployeeModelRequestWithManager();
         updateEmployeeModel = TestData.generateUpdateEmployeeModelRequest();
+        pageRequest = PageRequest.of(0, 10);
     }
 
 
@@ -90,9 +96,9 @@ public class EmployeeServiceImplTest {
                 .thenReturn(false);
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.addEmployeeModelToEmployee(employeeModelRequest))
+        when(employeeMapper.addEmployeeModelToEmployee(employeeModelRequest))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel savedEmployee = employeeService.addEmployee(employeeModelRequest);
@@ -110,9 +116,9 @@ public class EmployeeServiceImplTest {
                 .thenReturn(false);
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.addEmployeeModelToEmployee(employeeModelWithManager))
+        when(employeeMapper.addEmployeeModelToEmployee(employeeModelWithManager))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
         doNothing().
                 when(employeeManagerService).assignEmployeeToManager(employee.getId(), employeeModelWithManager.getManagerId());
@@ -138,7 +144,7 @@ public class EmployeeServiceImplTest {
     public void getEmployeeSuccessfully() {
         when(employeeRepository.findById(1L))
                 .thenReturn(Optional.of(employee));
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
         EmployeeModel employeeModelObj = employeeService.getEmployee(1L);
@@ -149,11 +155,39 @@ public class EmployeeServiceImplTest {
     }
 
     @Test
+    public void getEmployeesSuccessfully() {
+        Page<Employee> pagedResponse = TestData.getEmployees();
+
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(pagedResponse);
+        when(mapStructMapper.map(Collections.singletonList(employee)))
+                .thenReturn(Collections.singletonList(employeeModel));
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(1, employees.size());
+    }
+
+
+    @Test
+    public void getEmptyListOfEmployeesSuccessfully() {
+        when(employeeRepository.findAll(pageRequest))
+                .thenReturn(Page.empty());
+        when(mapStructMapper.map(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
+
+        List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
+
+        assertEquals(0, employees.size());
+    }
+
+
+    @Test
     public void updateEmployeeFails_whenEmployeeDoesNotExist() {
         when(employeeRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> employeeService.updateEmployeeDetails(1L, updateEmployeeModel))
+        assertThatThrownBy(() -> employeeService.updateEmployee(1L, updateEmployeeModel))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Employee does not exist.");
     }
@@ -164,10 +198,10 @@ public class EmployeeServiceImplTest {
                 .thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee))
                 .thenReturn(employee);
-        when(mapStructMapper.employeeToEmployeeModel(employee))
+        when(employeeMapper.employeeToEmployeeModel(employee))
                 .thenReturn(employeeModel);
 
-        EmployeeModel employeeModelObj = employeeService.updateEmployeeDetails(1L, updateEmployeeModel);
+        EmployeeModel employeeModelObj = employeeService.updateEmployee(1L, updateEmployeeModel);
 
         assertNotNull(employeeModelObj.getEmail());
         assertNotNull(employeeModelObj.getFirstName());

@@ -1,6 +1,6 @@
 package com.appraisal.modules.manager.services.impl;
 
-import com.appraisal.common.MapStructMapper;
+import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ManagerServiceImpl implements ManagerService {
     private final EmployeeRepository employeeRepository;
     private final ManagerRepository managerRepository;
-    private final MapStructMapper mapStructMapper;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     public void addManager(Long employeeId) {
@@ -46,7 +46,7 @@ public class ManagerServiceImpl implements ManagerService {
         Manager manager = managerRepository.findById(managerId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
 
-        return mapStructMapper.employeeToEmployeeModel(manager.getEmployee());
+        return employeeMapper.employeeToEmployeeModel(manager.getEmployee());
     }
 
     @Override
