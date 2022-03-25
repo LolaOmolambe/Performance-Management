@@ -54,7 +54,6 @@ public class EmployeeServiceImplTest {
     private EmployeeModel employeeModel;
     private UpdateEmployeeModel updateEmployeeModel;
     private PageRequest pageRequest;
-    private UpdateEmployeeModel updateEmployeeModel;
 
     @BeforeEach
     void setUp() {
