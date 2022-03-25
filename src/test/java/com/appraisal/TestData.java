@@ -93,8 +93,8 @@ public class TestData {
         EmployeeManager employeeManager = EmployeeManager.builder().manager(manager).employee(employee).build();
         employeeManager.setId(1L);
 
-        List<EmployeeManager> employeeManagers = Collections.singletonList(employeeManager);
-        return (Page<EmployeeManager>) new PageImpl(employeeManagers);
+        List<EmployeeManager> employeeManagers = List.of(employeeManager);
+        return new PageImpl(employeeManagers);
     }
 
 }

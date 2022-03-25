@@ -30,7 +30,7 @@ public class EmployeeController {
         return employeeService.addEmployee(addEmployeeModel);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public EmployeeModel getEmployee(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
@@ -45,7 +45,7 @@ public class EmployeeController {
          defaultEmployeeManagerService.assignEmployeeToManager(employeeToManagerModel.getEmployeeId(), employeeToManagerModel.getManagerId());
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping("/{id}")
     public EmployeeModel updateEmployee(@PathVariable(value = "id") Long id,
                                         @Validated @RequestBody UpdateEmployeeModel updateEmployeeModel){
        return employeeService.updateEmployee(id, updateEmployeeModel);

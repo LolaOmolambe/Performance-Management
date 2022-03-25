@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,23 +57,9 @@ public class ManagerServiceImpl implements ManagerService {
         Page<Manager> managers = managerRepository.findAll(pageable);
         List<Manager> managersContent = managers.getContent();
 
-        return getEmployeeModels(managersContent);
-    }
-
-    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
         return managersContent.stream()
                 .map(this::getEmployeeModel).toList();
-    }
 
-    private EmployeeModel getEmployeeModel(Manager manager) {
-        Employee employee = manager.getEmployee();
-        return EmployeeModel.builder()
-                .lastName(employee.getLastName())
-                .firstName(employee.getFirstName())
-                .dateEmployed(employee.getDateEmployed())
-                .id(employee.getId())
-                .email(employee.getEmail())
-                .build();
     }
 
     @Override
@@ -85,15 +70,19 @@ public class ManagerServiceImpl implements ManagerService {
         Page<EmployeeManager> allByManager = employeeManagerRepository.findAllByManager(manager, pageable);
         List<EmployeeManager> allByManagerContent = allByManager.getContent();
 
-        List<EmployeeModel> employeeModels = new ArrayList<>();
+        return allByManagerContent.stream()
+                .map(this::getEmployeeModel).toList();
 
+    }
 
-        for (EmployeeManager employeeManager : allByManagerContent) {
-            Employee employee = employeeManager.getEmployee();
-            EmployeeModel employeeModel = buildEmployeeModel(employee);
-            employeeModels.add(employeeModel);
-        }
-        return employeeModels;
+    private EmployeeModel getEmployeeModel(Manager manager) {
+        Employee employee = manager.getEmployee();
+        return buildEmployeeModel(employee);
+    }
+
+    private EmployeeModel getEmployeeModel(EmployeeManager employeeManager) {
+        Employee employee = employeeManager.getEmployee();
+        return buildEmployeeModel(employee);
     }
 
     private EmployeeModel buildEmployeeModel(Employee employee) {
@@ -105,6 +94,5 @@ public class ManagerServiceImpl implements ManagerService {
                 .email(employee.getEmail())
                 .build();
     }
-
 
 }
