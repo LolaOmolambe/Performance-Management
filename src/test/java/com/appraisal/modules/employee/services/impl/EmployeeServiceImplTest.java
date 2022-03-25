@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,8 +159,8 @@ public class EmployeeServiceImplTest {
 
         when(employeeRepository.findAll(pageRequest))
                 .thenReturn(pagedResponse);
-        when(mapStructMapper.map(Collections.singletonList(employee)))
-                .thenReturn(Collections.singletonList(employeeModel));
+        when(employeeMapper.employeesToEmployeeModels(List.of(employee)))
+                .thenReturn(List.of(employeeModel));
 
         List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
 
@@ -173,8 +172,8 @@ public class EmployeeServiceImplTest {
     public void getEmptyListOfEmployeesSuccessfully() {
         when(employeeRepository.findAll(pageRequest))
                 .thenReturn(Page.empty());
-        when(mapStructMapper.map(Collections.emptyList()))
-                .thenReturn(Collections.emptyList());
+        when(employeeMapper.employeesToEmployeeModels(List.of()))
+                .thenReturn(List.of());
 
         List<EmployeeModel> employees = employeeService.getEmployees(pageRequest);
 
