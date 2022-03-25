@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,20 +58,18 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
-        List<EmployeeModel> employeeModels = new ArrayList<>();
+        return managersContent.stream()
+                .map(this::getEmployeeModel).toList();
+    }
 
-        for (Manager manager : managersContent) {
-            Employee employee = manager.getEmployee();
-            EmployeeModel employeeModel = EmployeeModel.builder()
-                    .lastName(employee.getLastName())
-                    .firstName(employee.getFirstName())
-                    .dateEmployed(employee.getDateEmployed())
-                    .id(employee.getId())
-                    .email(employee.getEmail())
-                    .build();
-
-            employeeModels.add(employeeModel);
-        }
-        return employeeModels;
+    private EmployeeModel getEmployeeModel(Manager manager) {
+        Employee employee = manager.getEmployee();
+        return EmployeeModel.builder()
+                .lastName(employee.getLastName())
+                .firstName(employee.getFirstName())
+                .dateEmployed(employee.getDateEmployed())
+                .id(employee.getId())
+                .email(employee.getEmail())
+                .build();
     }
 }
