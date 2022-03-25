@@ -5,8 +5,10 @@ import com.appraisal.common.EmployeeMapper;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
+import com.appraisal.entities.EmployeeManager;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
+import com.appraisal.repositories.EmployeeManagerRepository;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +35,9 @@ public class ManagerServiceImplTest {
 
     @Mock
     private ManagerRepository managerRepository;
+
+    @Mock
+    private EmployeeManagerRepository employeeManagerRepository;
 
     @Mock
     private EmployeeMapper employeeMapper;
@@ -129,5 +134,29 @@ public class ManagerServiceImplTest {
         List<EmployeeModel> managers = managerService.getManagers(pageRequest);
 
         assertEquals(0, managers.size());
+    }
+
+    @Test
+    public void getEmployeesAttachedToManagerFails_whenManagerDoesNotExist() {
+        when(managerRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> managerService.getEmployeesAttachedToManager(1L, pageRequest))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Manager does not exist.");
+    }
+
+    @Test
+    public void getEmployeesAttachedToManagerSuccessfully() {
+        Page<EmployeeManager> employeeManagers = TestData.getEmployeeManagers();
+
+        when(managerRepository.findById(1L))
+                .thenReturn(Optional.of(manager));
+        when(employeeManagerRepository.findAllByManager(manager, pageRequest))
+                .thenReturn(employeeManagers);
+
+        List<EmployeeModel> managers = managerService.getEmployeesAttachedToManager(1L, pageRequest);
+
+        assertEquals(1, managers.size());
     }
 }

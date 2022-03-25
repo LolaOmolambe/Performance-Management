@@ -26,7 +26,7 @@ public class ManagerController {
         managerService.addManager(addManagerModel.getEmployeeId());
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public EmployeeModel getManager(@PathVariable Long id) {
         return managerService.getManager(id);
     }
@@ -34,5 +34,10 @@ public class ManagerController {
     @GetMapping
     public List<EmployeeModel> getManagers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return managerService.getManagers(pageable);
+    }
+
+    @GetMapping("/{id}/employees")
+    public List<EmployeeModel> getEmployeesAttachedToManager(@PathVariable Long id, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return managerService.getEmployeesAttachedToManager(id, pageable);
     }
 }

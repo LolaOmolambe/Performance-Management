@@ -11,4 +11,6 @@ public interface ManagerService {
     EmployeeModel getManager(Long managerId);
 
     List<EmployeeModel> getManagers(Pageable pageable);
+
+    List<EmployeeModel> getEmployeesAttachedToManager(Long managerId, Pageable pageable);
 }

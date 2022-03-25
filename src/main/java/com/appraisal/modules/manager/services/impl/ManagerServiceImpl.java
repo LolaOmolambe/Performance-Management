@@ -5,9 +5,11 @@ import com.appraisal.common.enums.ResponseCode;
 import com.appraisal.common.exceptions.BadRequestException;
 import com.appraisal.common.exceptions.NotFoundException;
 import com.appraisal.entities.Employee;
+import com.appraisal.entities.EmployeeManager;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.response.EmployeeModel;
 import com.appraisal.modules.manager.services.ManagerService;
+import com.appraisal.repositories.EmployeeManagerRepository;
 import com.appraisal.repositories.EmployeeRepository;
 import com.appraisal.repositories.ManagerRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ManagerServiceImpl implements ManagerService {
     private final EmployeeRepository employeeRepository;
     private final ManagerRepository managerRepository;
     private final EmployeeMapper employeeMapper;
+    private final EmployeeManagerRepository employeeManagerRepository;
 
     @Override
     public void addManager(Long employeeId) {
@@ -54,16 +57,35 @@ public class ManagerServiceImpl implements ManagerService {
         Page<Manager> managers = managerRepository.findAll(pageable);
         List<Manager> managersContent = managers.getContent();
 
-        return getEmployeeModels(managersContent);
-    }
-
-    private List<EmployeeModel> getEmployeeModels(List<Manager> managersContent) {
         return managersContent.stream()
                 .map(this::getEmployeeModel).toList();
+
+    }
+
+    @Override
+    public List<EmployeeModel> getEmployeesAttachedToManager(Long managerId, Pageable pageable) {
+        Manager manager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.INVALID_MANAGER));
+
+        Page<EmployeeManager> allByManager = employeeManagerRepository.findAllByManager(manager, pageable);
+        List<EmployeeManager> allByManagerContent = allByManager.getContent();
+
+        return allByManagerContent.stream()
+                .map(this::getEmployeeModel).toList();
+
     }
 
     private EmployeeModel getEmployeeModel(Manager manager) {
         Employee employee = manager.getEmployee();
+        return buildEmployeeModel(employee);
+    }
+
+    private EmployeeModel getEmployeeModel(EmployeeManager employeeManager) {
+        Employee employee = employeeManager.getEmployee();
+        return buildEmployeeModel(employee);
+    }
+
+    private EmployeeModel buildEmployeeModel(Employee employee) {
         return EmployeeModel.builder()
                 .lastName(employee.getLastName())
                 .firstName(employee.getFirstName())
@@ -72,4 +94,5 @@ public class ManagerServiceImpl implements ManagerService {
                 .email(employee.getEmail())
                 .build();
     }
+
 }

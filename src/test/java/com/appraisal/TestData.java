@@ -1,6 +1,7 @@
 package com.appraisal;
 
 import com.appraisal.entities.Employee;
+import com.appraisal.entities.EmployeeManager;
 import com.appraisal.entities.Manager;
 import com.appraisal.modules.employee.apimodels.request.AddEmployeeModel;
 import com.appraisal.modules.employee.apimodels.request.UpdateEmployeeModel;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 public class TestData {
     public static AddEmployeeModel generateEmployeeModelRequest() {
@@ -83,6 +85,17 @@ public class TestData {
         Manager manager = generateManager();
         List<Manager> managers = List.of(manager);
         return  new PageImpl(managers);
+    }
+
+    public static Page<EmployeeManager> getEmployeeManagers() {
+        Manager manager = generateManager();
+        Employee employee = generateEmployee();
+
+        EmployeeManager employeeManager = EmployeeManager.builder().manager(manager).employee(employee).build();
+        employeeManager.setId(1L);
+
+        List<EmployeeManager> employeeManagers = List.of(employeeManager);
+        return new PageImpl(employeeManagers);
     }
 
 }
