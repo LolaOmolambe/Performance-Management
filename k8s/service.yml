@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: appraisal-backend-app
+  type: NodePort
   ports:
     - targetPort: 9009
       port: 80
