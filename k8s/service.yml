@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: appraisal-backend-service
 spec:
+  type: LoadBalancer
   selector:
     app: appraisal-backend-app
-  type: NodePort
   ports:
     - targetPort: 9009
       port: 80
+      protocol: TCP
