@@ -1,5 +1,19 @@
+server:
+  port: 9009
 spring:
-  application:
-    name: appraisal-service
-  config:
-    import: optional:configserver:http://appraisal-config-server-app-0.appraisal-config-server-app.default.svc.cluster.local:8888
+  jpa:
+    properties.hibernate.dialect : org.hibernate.dialect.PostgreSQLDialect
+    hibernate.show-sql: true
+    hibernate.ddl-auto: validate
+  datasource:
+    url: ${URL}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    initialize: true
+  flyway:
+    enabled: true
+  sql:
+    init:
+      continue-on-error: false
+      mode: always
+
