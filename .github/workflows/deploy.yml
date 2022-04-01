@@ -1,14 +1,14 @@
-name: Test Workflow
+name: Heroku Deployment
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Download repository
         uses: actions/checkout@v2
@@ -22,3 +22,11 @@ jobs:
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
+
+
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: ${{secrets.HEROKU_APP}}
